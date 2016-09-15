@@ -7,16 +7,14 @@ using System.IO;
 namespace DllInjector
 {
     partial class Program
-    {      
-        public static string injectionFunctionName = "Inject";       
-        public static uint _MAX_PATH = 260;
-
+    {   
         static void Main(string[] args)
-        {
+        {            
             Process.EnterDebugMode(); // Get those permissions
 
             //string libPath = Path.Combine(Environment.CurrentDirectory, @"InjectionFiles\BootStrap.dll");
             string libPath = @"C:\GitRepositories\Dll injection\x64\Release\BootStrap.dll";
+
             Console.WriteLine("[*] DLL injection demo");         
 
             if(!File.Exists(libPath))
@@ -46,14 +44,20 @@ namespace DllInjector
 
             //IntPtr handle = CreateRemoteThread(hProcess, (IntPtr)null, 0, GetProcAddress(krnl32, "LoadLibraryW"), pLibRemote, 0, IntPtr.Zero);
 
+            //Windows 7 implementation
             UInt32 handle = RtlCreateUserThread(hProcess, IntPtr.Zero, false, 0, IntPtr.Zero, IntPtr.Zero, GetProcAddress(krnl32, "LoadLibraryW"), pLibRemote, IntPtr.Zero, IntPtr.Zero);
-
-            var address = RetrieveModuleAddress(Process.GetProcessById(PID), libPath);
-            if (address == IntPtr.Zero) 
-            {
-                Console.WriteLine(string.Format("'{0}' was not loaded into the process.", libPath));
-            }
             
+            /*
+            //Int64 offSet = 0x000013b0; //WriteFile
+            Int64 offSet = 0x000012b0; //Start NET
+            var moduleAddress = RetrieveModuleAddress(Process.GetProcessById(PID), libPath);
+            var functionAddress = new IntPtr(moduleAddress.ToInt64() + offSet);
+
+            UInt32 handle2 = RtlCreateUserThread(hProcess, IntPtr.Zero, false, 0, IntPtr.Zero, IntPtr.Zero, functionAddress, moduleAddress, IntPtr.Zero, IntPtr.Zero);
+            */
+
+            Console.WriteLine(string.Format("'{0}' might be in there, dunno take a look in process explorer.", libPath));
+            Console.WriteLine(string.Format("'{0}' was the last error code returned.", Marshal.GetLastWin32Error()));
             Console.ReadKey();
         }
 
