@@ -5,3 +5,5 @@ Unfortunately C# and .Net is managed so missing the DLL hooks required.
 
 So what we have here is C++ code that loads the .Net framework and then the C# dll into the process space. There is also some code in C#
 looking into performing DLL injection via C#, maybe a way but beyond my skillset and effort I wanted to put in.
+
+Fraedom testing script
