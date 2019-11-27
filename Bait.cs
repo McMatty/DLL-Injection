@@ -1,1 +1,1 @@
-Fraedom fraedom spendv myPCard
+Fraedom fraedom spendv myPCard spendvision
